@@ -21,15 +21,37 @@ fn handle_client(mut stream: TcpStream) {
     }
   }
 
-  let json_response = r#"{"message": "Hello"}"#;
+  let parts: Vec<&str> = request.lines().next().unwrap_or("").split_whitespace().collect();
+
+  if parts.len() < 2 {
+    let json_response = r#"{"message": "Bad Request"}"#;
+    send_response(&mut stream, "400 Bad Request", "application/json", json_response);
+    return;
+  }
+
+  match parts[1] {
+    "/" => {
+      let json_response = r#"{"message": "Welcome!"}"#;
+      send_response(&mut stream, "200 OK", "application/json", json_response);
+    }
+    "/hello" => {
+      let json_response = r#"{"message": "Hello, World!"}"#;
+      send_response(&mut stream, "200 OK", "application/json", json_response);
+    }
+    _ => {
+      let json_response = r#"{"message": "Not Found"}"#;
+      send_response(&mut stream, "404 Not Found", "application/json", json_response);
+    }
+  }
+}
+
+fn send_response(stream: &mut TcpStream, status: &str, content_type: &str, body: &str) {
   let response = format!(
-    "HTTP/1.1 200 OK\r\n\
-       Content-Type: application/json\r\n\
-       Content-Length: {}\r\n\
-       \r\n\
-       {}",
-    json_response.len(),
-    json_response
+    "HTTP/1.1 {}\r\nContent-Type: {}\r\nContent-Length: {}\r\n\r\n{}",
+    status,
+    content_type,
+    body.len(),
+    body
   );
 
   if let Err(e) = stream.write_all(response.as_bytes()) {
