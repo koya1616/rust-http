@@ -21,8 +21,6 @@ fn handle_client(mut stream: TcpStream) {
     }
   }
 
-  println!("Received request: {}", request);
-
   let json_response = r#"{"message": "Hello"}"#;
   let response = format!(
     "HTTP/1.1 200 OK\r\n\
