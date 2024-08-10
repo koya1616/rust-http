@@ -9,4 +9,9 @@ impl TcpListener {
   pub fn local_addr(&self) -> io::Result<SocketAddr> {
       self.0.socket_addr()
   }
+
+  #[stable(feature = "rust1", since = "1.0.0")]
+  pub fn incoming(&self) -> Incoming<'_> {
+      Incoming { listener: self }
+  }
 }
