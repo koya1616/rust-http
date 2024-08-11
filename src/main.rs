@@ -1,4 +1,6 @@
 pub mod net;
+pub mod sys;
+pub mod sys_common;
 
 use std::io::{Read, Write};
 use std::net::TcpStream;
@@ -64,6 +66,9 @@ fn send_response(stream: &mut TcpStream, status: &str, content_type: &str, body:
 }
 
 fn main() {
+  println!("Target OS: {}", std::env::consts::OS);
+  println!("Target Architecture: {}", std::env::consts::ARCH);
+  println!("Target Family: {}", std::env::consts::FAMILY);
   let listener = TcpListenerMyself::bind("0.0.0.0:8000").unwrap();
   println!("Server listening. Visit http://localhost:8000");
 
