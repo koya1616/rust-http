@@ -11,7 +11,7 @@ run_task = [
 watch = true
 
 [tasks.watch.paths]
-paths = ["src/**/*", "code/**/*"]
+paths = ["src/**/*"]
 
 [tasks.fmt]
 command = "cargo"

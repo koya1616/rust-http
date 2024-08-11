@@ -1,5 +1,9 @@
+pub mod net;
+
 use std::io::{Read, Write};
-use std::net::{TcpListener, TcpStream};
+use std::net::TcpStream;
+
+use crate::net::tcp::TcpListenerMyself;
 
 fn handle_client(mut stream: TcpStream) {
   let mut buffer = [0; 1024];
@@ -60,7 +64,7 @@ fn send_response(stream: &mut TcpStream, status: &str, content_type: &str, body:
 }
 
 fn main() {
-  let listener = TcpListener::bind("0.0.0.0:8000").unwrap();
+  let listener = TcpListenerMyself::bind("0.0.0.0:8000").unwrap();
   println!("Server listening. Visit http://localhost:8000");
 
   let local_addr = listener.local_addr().unwrap();
